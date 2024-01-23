@@ -16,7 +16,11 @@ public class EmployeeBook {
     public double sumSalary() {
         double sum = 0;
         for (var emp : employees) {
-            sum += emp.getSalary();
+            try {
+                sum += emp.getSalary();
+            } catch (NullPointerException ex) {
+                ex.fillInStackTrace();
+            }
         }
         return sum;
     }
@@ -44,20 +48,28 @@ public class EmployeeBook {
     public double averageSalary() {
         int length = 0;
         for (var emp : employees) {
-            length++;
+            try {
+                length++;
+            } catch (NullPointerException ex) {
+                ex.fillInStackTrace();
+            }
         }
         return sumSalary() / length;
     }
 
     public void getFIOALLEmployees() {
         for (var emp : employees) {
-            System.out.println(emp.getFIO());
+            if (emp != null) {
+                System.out.println(emp.getFIO());
+            }
         }
     }
 
     public void IndexSalary(int percent) {
         for (var emp : employees) {
-            emp.setSalary(emp.getSalary() + emp.getSalary() / 100 * percent);
+            if (emp != null) {
+                emp.setSalary(emp.getSalary() + emp.getSalary() / 100 * percent);
+            }
         }
     }
 
@@ -71,7 +83,7 @@ public class EmployeeBook {
         }
         Employee min = null;
         for (var emp : employees) {
-            if (emp.getDepartment() == department && (min == null || min.getSalary() > emp.getSalary())) {
+            if (emp != null && emp.getDepartment() == department && (min == null || min.getSalary() > emp.getSalary())) {
                 min = emp;
             }
         }
@@ -88,7 +100,7 @@ public class EmployeeBook {
         }
         Employee max = null;
         for (var emp : employees) {
-            if (emp.getDepartment() == department && (max == null || max.getSalary() < emp.getSalary())) {
+            if (emp != null && emp.getDepartment() == department && (max == null || max.getSalary() < emp.getSalary())) {
                 max = emp;
             }
         }
@@ -105,7 +117,7 @@ public class EmployeeBook {
         }
         double sum = 0;
         for (var emp : employees) {
-            if (emp.getDepartment() == department) {
+            if (emp != null && emp.getDepartment() == department) {
                 sum += emp.getSalary();
             }
         }
@@ -121,7 +133,7 @@ public class EmployeeBook {
             System.out.println(ex.getMessage());
         }
         for (var emp : employees) {
-            if (emp.getDepartment() == department) {
+            if (emp != null && emp.getDepartment() == department) {
                 emp.setSalary(emp.getSalary() + emp.getSalary() / 100 * percent);
             }
         }
@@ -136,7 +148,7 @@ public class EmployeeBook {
             System.out.println(ex.getMessage());
         }
         for (var emp : employees) {
-            if (emp.getDepartment() == department) {
+            if (emp != null && emp.getDepartment() == department) {
                 System.out.println(emp.getFIO() + ". Зарплата: " + emp.getSalary()
                         + ". Табельный номер: " + emp.getId() + ".");
             }
@@ -145,7 +157,7 @@ public class EmployeeBook {
 
     public void getEmployeesWithOverSalary(double salary) {
         for (var emp : employees) {
-            if (emp.getSalary() > salary) {
+            if (emp != null && emp.getSalary() > salary) {
                 System.out.println(emp.getFIO() + ". Зарплата: " + emp.getSalary()
                         + ". Табельный номер: " + emp.getId() + ".");
             }
@@ -154,7 +166,7 @@ public class EmployeeBook {
 
     public void getEmployeesWithUnderSalary(double salary) {
         for (var emp : employees) {
-            if (emp.getSalary() < salary) {
+            if (emp != null && emp.getSalary() < salary) {
                 System.out.println(emp.getFIO() + ". Зарплата: " + emp.getSalary()
                         + ". Табельный номер: " + emp.getId() + ".");
             }
@@ -187,9 +199,10 @@ public class EmployeeBook {
     }
 
     public void delete(String fIO) {
-        for (var emp : employees) {
-            if (emp.getFIO().equals(fIO)) {
-                emp = null;
+        for (int i = 0; i < employees.length; i++) {
+            if (employees[i].getFIO().equals(fIO)) {
+                employees[i] = null;
+                return;
             }
         }
         System.out.println("Нет работника с такими ФИО.");
@@ -201,7 +214,7 @@ public class EmployeeBook {
                 throw new IllegalArgumentException("Не верный номер отдела");
             }
             for (var emp : employees) {
-                if (emp.getFIO().equals(fIO)) {
+                if (emp != null && emp.getFIO().equals(fIO)) {
                     emp.setDepartment(department);
                     emp.setSalary(salary);
                     return;

@@ -11,6 +11,10 @@ public class Main {
         employeeBook.add("Васильев Василий Васильевич", 5, 44000);
         employeeBook.add("Ольгина Ольга Александровна", 4, 38000);
         employeeBook.add("Димитрова Валерия Юрьевна", 3, 27000);
-        employeeBook.getEmployeeWithMinSalary(6);
+        employeeBook.delete(2);
+        employeeBook.getInfo();
+        System.out.println(employeeBook.sumSalary());
+        System.out.println(employeeBook.getEmployeeWithMinSalary());
+        employeeBook.getInfoForDepartments();
     }
 }
